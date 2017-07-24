@@ -73,3 +73,87 @@ For each plot you should
  * Create a separate R code file (plot1.R, plot2.R, etc.) that constructs the corresponding plot, i.e. code in plot1.R constructs the plot1.png plot. Your code file should include code for reading the data so that the plot can be fully reproduced. You must also include the code that creates the PNG file. Only include the code for a single plot (i.e. plot1.R should only include code for producing plot1.png)
  * Upload the PNG file on the Assignment submission page
  * Copy and paste the R code from the corresponding R file into the text box at the appropriate point in the peer assessment.
+ 
+## Answer Set
+
+### Data Prepartion
+The following answers all depend on the PM2.5 Emmissions dataset. The following script is common in all script files.
+
+#### Download the data
+Source the file and unzip the contents
+```R
+# Download archive file, if it does not exist
+
+if(!(file.exists("summarySCC_PM25.rds") && 
+     file.exists("Source_Classification_Code.rds"))) { 
+    
+    fileName <- "NEI_data.zip"
+    if(!file.exists(fileName)) {
+        fileURL <- "https://d396qusza40orc.cloudfront.net/exdata%2Fdata%2FNEI_data.zip"
+        download.file(url=fileURL,destfile=fileName,method="curl")
+    }  
+    unzip(dataFile) 
+}
+```
+#### Load the NEI and SCC data frames
+```R
+NEIdata <- readRDS("summarySCC_PM25.rds")
+SCCdata <- readRDS("Source_Classification_Code.rds")
+```
+#### Take a peek at the contents
+```R
+head(NEI)
+```
+
+```R
+head(SCC)
+```
+
+#### Load the packages that we'll need for plotting
+```R
+library(ggplot2)
+library(plyr)
+```
+### Answer the questions
+#### Question 1: Have total emissions from PM2.5 decreased in the United States from 1999 to 2008?
+Using the base plotting system, make a plot showing the total PM2.5 emission from all sources for each of the years 1999, 2002, 2005, and 2008.
+
+Aggregate the data
+```R
+emmissionsTotal <- aggregate(Emissions ~ year, NEIdata, sum)
+head(emmissionsTotal)
+```
+Plot the data using a base plotting system
+```R
+barplot(
+  (emmissionsTotal$Emissions)/10^6,
+  names.arg=emmissionsTotal$year,
+  xlab="Year",
+  ylab="PM2.5 Emissions (10^6 Tons)",
+  main="Total PM2.5 Emissions From All US Sources"
+)
+```
+
+Answer #1: As per the plot, there is a downward trend of PM2.5 emissions from 1999 to 2008
+
+#### Question 2: Have total emissions from PM2.5 decreased in the Baltimore City, Maryland (fips == “24510”) from 1999 to 2008? 
+Use the base plotting system to make a plot answering this question.
+
+Subset the data first, and then aggregate the emissions by year
+```R
+NEIdataBaltimore<-subset(NEIdata, fips == "24510")
+emmissionsBaltimore <- aggregate(Emissions ~ year, NEIdata, sum)
+head(emmissionsBaltimore)
+```
+Plot the data using a base plotting system
+```R
+barplot(
+  (emmissionsBaltimore$Emissions)/10^6,
+  names.arg=emmissionsBaltimore$year,
+  xlab="Year",
+  ylab="PM2.5 Emissions (10^6 Tons)",
+  main="Total PM2.5 Emissions for Baltimore City, MD"
+)
+```
+
+Answer #1: As per the plot, there is a downward trend of PM2.5 emissions from 1999 to 2008
