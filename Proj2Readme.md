@@ -133,6 +133,7 @@ barplot(
   main="Total PM2.5 Emissions From All US Sources"
 )
 ```
+![Plot 1](plot1.png)
 
 Answer #1: As per the plot, there is a downward trend of PM2.5 emissions from 1999 to 2008
 
