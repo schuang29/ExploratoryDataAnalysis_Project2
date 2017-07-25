@@ -90,7 +90,7 @@ if(!(file.exists("summarySCC_PM25.rds") &&
     fileName <- "NEI_data.zip"
     if(!file.exists(fileName)) {
         fileURL <- "https://d396qusza40orc.cloudfront.net/exdata%2Fdata%2FNEI_data.zip"
-        download.file(url=fileURL,destfile=fileName,method="curl")
+        download.file(url=fileURL,destfile=fileName,mode="wb")
     }  
     unzip(dataFile) 
 }
@@ -102,11 +102,98 @@ SCCdata <- readRDS("Source_Classification_Code.rds")
 ```
 #### Take a peek at the contents
 ```R
-head(NEI)
+head(NEIdata)
+
+    fips      SCC Pollutant Emissions  type year
+4  09001 10100401  PM25-PRI    15.714 POINT 1999
+8  09001 10100404  PM25-PRI   234.178 POINT 1999
+12 09001 10100501  PM25-PRI     0.128 POINT 1999
+16 09001 10200401  PM25-PRI     2.036 POINT 1999
+20 09001 10200504  PM25-PRI     0.388 POINT 1999
+24 09001 10200602  PM25-PRI     1.490 POINT 1999
+
+str(NEIdata)
+
+'data.frame':	6497651 obs. of  6 variables:
+ $ fips     : chr  "09001" "09001" "09001" "09001" ...
+ $ SCC      : chr  "10100401" "10100404" "10100501" "10200401" ...
+ $ Pollutant: chr  "PM25-PRI" "PM25-PRI" "PM25-PRI" "PM25-PRI" ...
+ $ Emissions: num  15.714 234.178 0.128 2.036 0.388 ...
+ $ type     : chr  "POINT" "POINT" "POINT" "POINT" ...
+ $ year     : int  1999 1999 1999 1999 1999 1999 1999 1999 1999 1999 ...
 ```
 
 ```R
-head(SCC)
+head(SCCdata)
+
+       SCC Data.Category
+1 10100101         Point
+2 10100102         Point
+3 10100201         Point
+4 10100202         Point
+5 10100203         Point
+6 10100204         Point
+                                                                  Short.Name
+1                   Ext Comb /Electric Gen /Anthracite Coal /Pulverized Coal
+2 Ext Comb /Electric Gen /Anthracite Coal /Traveling Grate (Overfeed) Stoker
+3       Ext Comb /Electric Gen /Bituminous Coal /Pulverized Coal: Wet Bottom
+4       Ext Comb /Electric Gen /Bituminous Coal /Pulverized Coal: Dry Bottom
+5                   Ext Comb /Electric Gen /Bituminous Coal /Cyclone Furnace
+6                   Ext Comb /Electric Gen /Bituminous Coal /Spreader Stoker
+                               EI.Sector Option.Group Option.Set
+1 Fuel Comb - Electric Generation - Coal                        
+2 Fuel Comb - Electric Generation - Coal                        
+3 Fuel Comb - Electric Generation - Coal                        
+4 Fuel Comb - Electric Generation - Coal                        
+5 Fuel Comb - Electric Generation - Coal                        
+6 Fuel Comb - Electric Generation - Coal                        
+                SCC.Level.One       SCC.Level.Two
+1 External Combustion Boilers Electric Generation
+2 External Combustion Boilers Electric Generation
+3 External Combustion Boilers Electric Generation
+4 External Combustion Boilers Electric Generation
+5 External Combustion Boilers Electric Generation
+6 External Combustion Boilers Electric Generation
+                SCC.Level.Three
+1               Anthracite Coal
+2               Anthracite Coal
+3 Bituminous/Subbituminous Coal
+4 Bituminous/Subbituminous Coal
+5 Bituminous/Subbituminous Coal
+6 Bituminous/Subbituminous Coal
+                                 SCC.Level.Four Map.To
+1                               Pulverized Coal     NA
+2             Traveling Grate (Overfeed) Stoker     NA
+3 Pulverized Coal: Wet Bottom (Bituminous Coal)     NA
+4 Pulverized Coal: Dry Bottom (Bituminous Coal)     NA
+5             Cyclone Furnace (Bituminous Coal)     NA
+6             Spreader Stoker (Bituminous Coal)     NA
+  Last.Inventory.Year Created_Date Revised_Date Usage.Notes
+1                  NA                                      
+2                  NA                                      
+3                  NA                                      
+4                  NA                                      
+5                  NA                                      
+6                  NA
+
+str(SCCdata)
+
+'data.frame':	11717 obs. of  15 variables:
+ $ SCC                : Factor w/ 11717 levels "10100101","10100102",..: 1 2 3 4 5 6 7 8 9 10 ...
+ $ Data.Category      : Factor w/ 6 levels "Biogenic","Event",..: 6 6 6 6 6 6 6 6 6 6 ...
+ $ Short.Name         : Factor w/ 11238 levels "","2,4-D Salts and Esters Prod /Process Vents, 2,4-D Recovery: Filtration",..: 3283 3284 3293 3291 3290 3294 3295 3296 3292 3289 ...
+ $ EI.Sector          : Factor w/ 59 levels "Agriculture - Crops & Livestock Dust",..: 18 18 18 18 18 18 18 18 18 18 ...
+ $ Option.Group       : Factor w/ 25 levels "","C/I Kerosene",..: 1 1 1 1 1 1 1 1 1 1 ...
+ $ Option.Set         : Factor w/ 18 levels "","A","B","B1A",..: 1 1 1 1 1 1 1 1 1 1 ...
+ $ SCC.Level.One      : Factor w/ 17 levels "Brick Kilns",..: 3 3 3 3 3 3 3 3 3 3 ...
+ $ SCC.Level.Two      : Factor w/ 146 levels "","Agricultural Chemicals Production",..: 32 32 32 32 32 32 32 32 32 32 ...
+ $ SCC.Level.Three    : Factor w/ 1061 levels "","100% Biosolids (e.g., sewage sludge, manure, mixtures of these matls)",..: 88 88 156 156 156 156 156 156 156 156 ...
+ $ SCC.Level.Four     : Factor w/ 6084 levels "","(NH4)2 SO4 Acid Bath System and Evaporator",..: 4455 5583 4466 4458 1341 5246 5584 5983 4461 776 ...
+ $ Map.To             : num  NA NA NA NA NA NA NA NA NA NA ...
+ $ Last.Inventory.Year: int  NA NA NA NA NA NA NA NA NA NA ...
+ $ Created_Date       : Factor w/ 57 levels "","1/27/2000 0:00:00",..: 1 1 1 1 1 1 1 1 1 1 ...
+ $ Revised_Date       : Factor w/ 44 levels "","1/27/2000 0:00:00",..: 1 1 1 1 1 1 1 1 1 1 ...
+ $ Usage.Notes        : Factor w/ 21 levels ""," ","includes bleaching towers, washer hoods, filtrate tanks, vacuum pump exhausts",..: 1 1 1 1 1 1 1 1 1 1 ...  
 ```
 
 #### Load the packages that we'll need for plotting
@@ -143,7 +230,7 @@ Use the base plotting system to make a plot answering this question.
 Subset the data first, and then aggregate the emissions by year
 ```R
 NEIdataBaltimore<-subset(NEIdata, fips == "24510")
-emmissionsBaltimore <- aggregate(Emissions ~ year, NEIdata, sum)
+emmissionsBaltimore <- aggregate(Emissions ~ year, NEIdataBaltimore, sum)
 head(emmissionsBaltimore)
 ```
 Plot the data using a base plotting system
@@ -156,5 +243,68 @@ barplot(
   main="Total PM2.5 Emissions for Baltimore City, MD"
 )
 ```
+![Plot 2](plot2.png)
 
-Answer #1: As per the plot, there is a downward trend of PM2.5 emissions from 1999 to 2008
+Answer #2: As per the plot, while there is a overall downward trend of PM2.5 emissions from 1999 to 2008, there was a spike in 2005.
+
+
+#### Question 3: Of the four types of sources indicated by the type (point, nonpoint, onroad, nonroad) variable, which of these four sources have seen decreases in emissions from 1999-2008 for Baltimore City?
+Which have seen increases in emissions from 1999-2008? Use the ggplot2 plotting system to make a plot answer this question.
+
+Subset the data by Baltimore City, and aggregate the emissions by year
+```R
+NEIdataBaltimore<-subset(NEIdata, fips == "24510")
+emmissionsBaltimore <- aggregate(Emissions ~ year, NEIdataBaltimore, sum)
+head(emmissionsBaltimore)
+```
+Facet Plot by Type
+```R
+#Plot the graph
+ggp <- ggplot(NEIdataBaltimore,aes(factor(year),Emissions,fill=type)) +
+    geom_bar(stat="identity") +
+    theme_bw() + guides(fill=FALSE)+
+    facet_grid(.~type,scales = "free",space="free") + 
+    labs(x="year", y=expression("Total PM"[2.5]*" Emission (Tons)")) + 
+    labs(title=expression("PM"[2.5]*" Emissions, Baltimore City 1999-2008 by Source Type"))
+
+print(ggp)
+```
+![Plot 3](plot3.png)
+
+Answer #3: As per the plot, Non-Road, Non-Point, and On-Road types have seen decreases in Baltimore City between 1999 and 2008. Point emmisions have overall increased during this period, with a spike in 2005, and an eventual decrease in 2008, but still higher than first baselined in 1999.
+
+#### Question 4: Across the United States, how have emissions from coal combustion-related sources changed from 1999–2008?
+
+Subset the data Source (SCC) data by combusition entries and coal entries
+```R
+#Get the combustion entries from the Level One attribute
+combustionEntries <- grepl("comb", SCCdata$SCC.Level.One, ignore.case=TRUE)
+
+#Get the coal entries from theLevel Four attribute
+coalEntries <- grepl("coal", SCCdata$SCC.Level.Four, ignore.case=TRUE) 
+
+#Xref the two sets to find the common entries that are both coal and combustion
+coalCombustionEntries <- (combustionEntries & coalEntries)
+
+#Get the monitor # of the common entries
+coalCombustionSCC <- SCCdata[coalCombustionEntries,]$SCC
+```
+
+Xref to the NEI data to get the rows (readings) matching the SCC
+```R
+coalCombustionNEI <- NEIdata[NEIdata$SCC %in% coalCombustionSCC,]
+```
+Histogram Plot
+```R
+#plot the graph
+ggp <- ggplot(coalCombustionNEI,aes(factor(year),Emissions/10^5)) +
+    geom_bar(stat="identity",fill="grey",width=0.75) +
+    theme_bw() +  guides(fill=FALSE) +
+    labs(x="year", y=expression("Total PM"[2.5]*" Emission (10^5 Tons)")) + 
+    labs(title=expression("PM"[2.5]*" Coal Combustion Source Emissions Across US from 1999-2008"))
+
+print(ggp)
+```
+![Plot 4](plot4.png)
+
+Answer #4: As per the plot, coal combustible sources have generally decreased from 1999 to 2008. There was a decrease from 1999 to 2002, but plateaued to 2005, and began to decrease again afterwards to 2008
