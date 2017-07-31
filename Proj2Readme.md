@@ -201,9 +201,11 @@ str(SCCdata)
 library(ggplot2)
 library(plyr)
 ```
-### Answer the questions
-#### Question 1: Have total emissions from PM2.5 decreased in the United States from 1999 to 2008?
+
+### Question 1: Have total emissions from PM2.5 decreased in the United States from 1999 to 2008?
 Using the base plotting system, make a plot showing the total PM2.5 emission from all sources for each of the years 1999, 2002, 2005, and 2008.
+
+[Source file for plot1.R](plot1.R)
 
 Aggregate the data
 ```R
@@ -224,8 +226,10 @@ barplot(
 
 Answer #1: As per the plot, there is a downward trend of PM2.5 emissions from 1999 to 2008
 
-#### Question 2: Have total emissions from PM2.5 decreased in the Baltimore City, Maryland (fips == “24510”) from 1999 to 2008? 
+### Question 2: Have total emissions from PM2.5 decreased in the Baltimore City, Maryland (fips == “24510”) from 1999 to 2008? 
 Use the base plotting system to make a plot answering this question.
+
+[Source file for plot2.R](plot2.R)
 
 Subset the data first, and then aggregate the emissions by year
 ```R
@@ -248,8 +252,10 @@ barplot(
 Answer #2: As per the plot, while there is a overall downward trend of PM2.5 emissions from 1999 to 2008, there was a spike in 2005.
 
 
-#### Question 3: Of the four types of sources indicated by the type (point, nonpoint, onroad, nonroad) variable, which of these four sources have seen decreases in emissions from 1999-2008 for Baltimore City?
+### Question 3: Of the four types of sources indicated by the type (point, nonpoint, onroad, nonroad) variable, which of these four sources have seen decreases in emissions from 1999-2008 for Baltimore City?
 Which have seen increases in emissions from 1999-2008? Use the ggplot2 plotting system to make a plot answer this question.
+
+[Source file for plot3.R](plot3.R)
 
 Subset the data by Baltimore City, and aggregate the emissions by year
 ```R
@@ -272,7 +278,9 @@ print(ggp)
 
 Answer #3: As per the plot, Non-Road, Non-Point, and On-Road types have seen decreases in Baltimore City between 1999 and 2008. Point emmisions have overall increased during this period, with a spike in 2005, and an eventual decrease in 2008, but still higher than first baselined in 1999.
 
-#### Question 4: Across the United States, how have emissions from coal combustion-related sources changed from 1999–2008?
+### Question 4: Across the United States, how have emissions from coal combustion-related sources changed from 1999–2008?
+
+[Source file for plot4.R](plot4.R)
 
 Subset the data Source (SCC) data by combusition entries and coal entries
 ```R
@@ -308,7 +316,9 @@ print(ggp)
 
 Answer #4: As per the plot, coal combustible sources have generally decreased from 1999 to 2008. There was a decrease from 1999 to 2002, but plateaued to 2005, and began to decrease again afterwards to 2008.
 
-#### Question 5: How have emissions from motor vehicle sources changed from 1999–2008 in Baltimore City?
+### Question 5: How have emissions from motor vehicle sources changed from 1999–2008 in Baltimore City?
+
+[Source file for plot5.R](plot5.R)
 
 Subset the data by motor vehicles in SCC.Level.Two
 ```R
@@ -316,7 +326,6 @@ vehicles <- grep("vehicle", SCCdata$SCC.Level.Two, ignore.case=TRUE)
 vehiclesSCC <- SCCdata[vehicles,]$SCC
 vehiclesNEI <- NEIdata[NEIdata$SCC %in% vehiclesSCC,]
 ```
-
 
 Subset the data by Baltimore City, and aggregate the emissions by year
 ```R
@@ -338,7 +347,9 @@ print(ggp)
 
 Answer #5: As per the plot, motor vehicle sources have generally decreased from 1999 to 2008. There was a decrease from 1999 to 2002, but plateaued to 2005, and began to decrease again afterwards to 2008.
 
-#### Question 6: Compare emissions from motor vehicle sources in Baltimore City with emissions from motor vehicle sources in Los Angeles County, California (fips == “06037”). Which city has seen greater changes over time in motor vehicle emissions?
+### Question 6: Compare emissions from motor vehicle sources in Baltimore City with emissions from motor vehicle sources in Los Angeles County, California (fips == “06037”). Which city has seen greater changes over time in motor vehicle emissions?
+
+[Source file for plot6.R](plot6.R)
 
 Subset the Emissions data from Baltimore City and add column to capture city name
 ```R
