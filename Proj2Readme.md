@@ -320,7 +320,7 @@ vehiclesNEI <- NEIdata[NEIdata$SCC %in% vehiclesSCC,]
 
 Subset the data by Baltimore City, and aggregate the emissions by year
 ```R
-VehicleNEIdataBaltimore<-vehiclesNEI[vehiclesNEI$fips==24510,]
+VehicleNEIdataBaltimore<-vehiclesNEI[vehiclesNEI$fips=="24510",]
 ```
 
 Histogram Plot
@@ -337,3 +337,38 @@ print(ggp)
 ![Plot 5](plot5.png)
 
 Answer #5: As per the plot, motor vehicle sources have generally decreased from 1999 to 2008. There was a decrease from 1999 to 2002, but plateaued to 2005, and began to decrease again afterwards to 2008.
+
+#### Question 6: Compare emissions from motor vehicle sources in Baltimore City with emissions from motor vehicle sources in Los Angeles County, California (fips == “06037”). Which city has seen greater changes over time in motor vehicle emissions?
+
+Subset the Emissions data from Baltimore City and add column to capture city name
+```R
+VehicleNEIdataBaltimore<-vehiclesNEI[vehiclesNEI$fips=="24510",]
+VehicleNEIdataBaltimore$city <- "Baltimore City"
+```
+
+Subset the Emissions data from LA and add column to capture city name
+```R
+VehicleNEIdataLosAngeles<-vehiclesNEI[vehiclesNEI$fips=="06037",]
+VehicleNEIdataLosAngeles$city <- "Los Angeles County"
+```
+
+Combine both datasets
+```R
+NEIBaltimoreAndLosAngeles <- rbind(VehicleNEIdataBaltimore, VehicleNEIdataLosAngeles)
+```
+
+Create a Facet Plot to compare the cities
+```R
+#plot the graph
+ggp <- ggplot(NEIBaltimoreAndLosAngeles,aes(x=factor(year),y=Emissions, fill=city)) +
+    geom_bar(stat="identity",aes(fill=year)) +
+    facet_grid(~city) +
+    theme_bw() +  guides(fill=FALSE) +
+    labs(x="year", y=expression("Total PM"[2.5]*" Emission (10^5 Tons)")) + 
+    labs(title=expression("PM"[2.5]*" Motor Vehicle Emissions in Baltimore and LA from 1999-2008"))
+
+print(ggp)
+```
+![Plot 6](plot6.png)
+
+Answer #6: As per the plot, LA has seen a greater magnitude of motor vehicle emmission change compared to Baltimore City between 1999 and 2008

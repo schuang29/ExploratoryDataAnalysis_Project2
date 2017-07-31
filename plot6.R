@@ -27,14 +27,23 @@ vehicles <- grep("vehicle", SCCdata$SCC.Level.Two, ignore.case=TRUE)
 vehiclesSCC <- SCCdata[vehicles,]$SCC
 vehiclesNEI <- NEIdata[NEIdata$SCC %in% vehiclesSCC,]
 
-#Subset the Emissions data from Baltimore City
+#Subset the Emissions data from Baltimore City and add column to capture city name
 VehicleNEIdataBaltimore<-vehiclesNEI[vehiclesNEI$fips=="24510",]
+VehicleNEIdataBaltimore$city <- "Baltimore City"
+
+#Subset the Emissions data from LA and add column to capture city name
+VehicleNEIdataLosAngeles<-vehiclesNEI[vehiclesNEI$fips=="06037",]
+VehicleNEIdataLosAngeles$city <- "Los Angeles County"
+
+#Combine both datasets
+NEIBaltimoreAndLosAngeles <- rbind(VehicleNEIdataBaltimore, VehicleNEIdataLosAngeles)
 
 #Plot the graph
-ggp <- ggplot(VehicleNEIdataBaltimore,aes(factor(year),Emissions)) +
-    geom_bar(stat="identity",fill="grey",width=0.75) +
+ggp <- ggplot(NEIBaltimoreAndLosAngeles,aes(x=factor(year),y=Emissions, fill=city)) +
+    geom_bar(stat="identity",aes(fill=year)) +
+    facet_grid(~city) +
     theme_bw() +  guides(fill=FALSE) +
     labs(x="year", y=expression("Total PM"[2.5]*" Emission (10^5 Tons)")) + 
-    labs(title=expression("PM"[2.5]*" Motor Vehicle Emissions in Baltimore from 1999-2008"))
+    labs(title=expression("PM"[2.5]*" Motor Vehicle Emissions in Baltimore and LA from 1999-2008"))
 
 print(ggp)
