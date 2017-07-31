@@ -255,7 +255,6 @@ Subset the data by Baltimore City, and aggregate the emissions by year
 ```R
 NEIdataBaltimore<-subset(NEIdata, fips == "24510")
 emmissionsBaltimore <- aggregate(Emissions ~ year, NEIdataBaltimore, sum)
-head(emmissionsBaltimore)
 ```
 Facet Plot by Type
 ```R
@@ -307,4 +306,34 @@ print(ggp)
 ```
 ![Plot 4](plot4.png)
 
-Answer #4: As per the plot, coal combustible sources have generally decreased from 1999 to 2008. There was a decrease from 1999 to 2002, but plateaued to 2005, and began to decrease again afterwards to 2008
+Answer #4: As per the plot, coal combustible sources have generally decreased from 1999 to 2008. There was a decrease from 1999 to 2002, but plateaued to 2005, and began to decrease again afterwards to 2008.
+
+#### Question 5: How have emissions from motor vehicle sources changed from 1999–2008 in Baltimore City?
+
+Subset the data by motor vehicles in SCC.Level.Two
+```R
+vehicles <- grep("vehicle", SCCdata$SCC.Level.Two, ignore.case=TRUE)
+vehiclesSCC <- SCCdata[vehicles,]$SCC
+vehiclesNEI <- NEIdata[NEIdata$SCC %in% vehiclesSCC,]
+```
+
+
+Subset the data by Baltimore City, and aggregate the emissions by year
+```R
+VehicleNEIdataBaltimore<-vehiclesNEI[vehiclesNEI$fips==24510,]
+```
+
+Histogram Plot
+```R
+#plot the graph
+ggp <- ggplot(VehicleNEIdataBaltimore,aes(factor(year),Emissions)) +
+    geom_bar(stat="identity",fill="grey",width=0.75) +
+    theme_bw() +  guides(fill=FALSE) +
+    labs(x="year", y=expression("Total PM"[2.5]*" Emission (10^5 Tons)")) + 
+    labs(title=expression("PM"[2.5]*" Motor Vehicle Emissions in Baltimore from 1999-2008"))
+
+print(ggp)
+```
+![Plot 5](plot5.png)
+
+Answer #5: As per the plot, motor vehicle sources have generally decreased from 1999 to 2008. There was a decrease from 1999 to 2002, but plateaued to 2005, and began to decrease again afterwards to 2008.
